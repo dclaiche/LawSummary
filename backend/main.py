@@ -1,3 +1,5 @@
+import logging
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -15,3 +17,9 @@ app.add_middleware(
 )
 
 app.include_router(router, prefix="/api")
+
+
+@app.on_event("startup")
+async def startup_warnings():
+    if not settings.courtlistener_token:
+        logging.warning("COURTLISTENER_TOKEN is not set — case law search will fail")

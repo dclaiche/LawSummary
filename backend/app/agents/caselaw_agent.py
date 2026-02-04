@@ -9,7 +9,7 @@ Two-step tool-use pattern:
 
 import logging
 
-MAX_REQUESTS_PER_AGENT = 5
+MAX_REQUESTS_PER_AGENT = 10
 
 from app.models.schemas import LegalIssue, FactPattern, StatuteResult, CaseLawResult
 from app.services.claude_client import ClaudeClient
@@ -95,10 +95,10 @@ async def run_caselaw_agent(
         cases_text += f"Snippet: {hit.snippet[:1000]}\n"
 
         # Try to get opinion detail for more context
-        if hit.cluster_id and request_count < MAX_REQUESTS_PER_AGENT:
+        if hit.opinion_id and request_count < MAX_REQUESTS_PER_AGENT:
             try:
                 request_count += 1
-                opinion = await cl_client.get_opinion(hit.cluster_id)
+                opinion = await cl_client.get_opinion(hit.opinion_id)
                 if opinion and opinion.opinion_text:
                     cases_text += f"Opinion excerpt: {opinion.opinion_text[:2000]}\n"
             except Exception as e:

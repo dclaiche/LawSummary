@@ -23,6 +23,7 @@ CA_COURTS = "cal calctapp"
 @dataclass
 class CourtListenerSearchHit:
     cluster_id: int
+    opinion_id: int
     case_name: str
     court: str
     date_filed: str
@@ -121,6 +122,14 @@ class CourtListenerClient:
             )
             resp.raise_for_status()
             data = resp.json()
+        except httpx.HTTPStatusError as e:
+            if e.response.status_code == 401:
+                raise ValueError(
+                    "CourtListener API token is missing or invalid. "
+                    "Set COURTLISTENER_TOKEN in backend/.env"
+                )
+            logger.error(f"CourtListener search error: {e}")
+            return []
         except httpx.HTTPError as e:
             logger.error(f"CourtListener search error: {e}")
             return []
@@ -133,18 +142,21 @@ class CourtListenerClient:
                 citations = item["citation"] if isinstance(item["citation"], list) else [item["citation"]]
             citation_str = citations[0] if citations else ""
 
-            # Extract snippet from highlights or snippet field
+            # Extract snippet and opinion_id from opinions array (v4 API nests them there)
             snippet = ""
-            if item.get("snippet"):
+            opinion_id = 0
+            opinions = item.get("opinions", [])
+            if opinions and isinstance(opinions, list):
+                snippet = opinions[0].get("snippet", "")
+                opinion_id = opinions[0].get("id", 0)
+            # Fallback to top-level fields if present
+            if not snippet and item.get("snippet"):
                 snippet = item["snippet"]
-            elif item.get("highlights"):
-                snippet = " ".join(
-                    h for h in (item["highlights"] if isinstance(item["highlights"], list) else [item["highlights"]])
-                )
 
             results.append(
                 CourtListenerSearchHit(
                     cluster_id=item.get("cluster_id", 0),
+                    opinion_id=opinion_id,
                     case_name=item.get("caseName", item.get("case_name", "")),
                     court=item.get("court", ""),
                     date_filed=item.get("dateFiled", item.get("date_filed", "")),
@@ -172,6 +184,14 @@ class CourtListenerClient:
             resp = await client.get(f"/opinions/{opinion_id}/")
             resp.raise_for_status()
             data = resp.json()
+        except httpx.HTTPStatusError as e:
+            if e.response.status_code == 401:
+                raise ValueError(
+                    "CourtListener API token is missing or invalid. "
+                    "Set COURTLISTENER_TOKEN in backend/.env"
+                )
+            logger.error(f"CourtListener opinion fetch error: {e}")
+            return None
         except httpx.HTTPError as e:
             logger.error(f"CourtListener opinion fetch error: {e}")
             return None
@@ -219,6 +239,14 @@ class CourtListenerClient:
             resp = await client.get(f"/clusters/{cluster_id}/")
             resp.raise_for_status()
             return resp.json()
+        except httpx.HTTPStatusError as e:
+            if e.response.status_code == 401:
+                raise ValueError(
+                    "CourtListener API token is missing or invalid. "
+                    "Set COURTLISTENER_TOKEN in backend/.env"
+                )
+            logger.error(f"CourtListener cluster fetch error: {e}")
+            return None
         except httpx.HTTPError as e:
             logger.error(f"CourtListener cluster fetch error: {e}")
             return None
