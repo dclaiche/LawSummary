@@ -13,7 +13,7 @@ export function ArchiveList() {
   }
 
   return (
-    <div className="p-2 space-y-1">
+    <div className="p-2 space-y-2">
       {archivedCases.map((c) => (
         <ArchiveItem
           key={c.id}

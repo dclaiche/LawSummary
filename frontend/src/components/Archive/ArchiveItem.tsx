@@ -9,29 +9,31 @@ interface ArchiveItemProps {
 }
 
 export function ArchiveItem({ archivedCase, onView, onDelete }: ArchiveItemProps) {
-  const preview = archivedCase.input_text.slice(0, 60);
+  const preview = archivedCase.input_text.slice(0, 80);
   const date = new Date(archivedCase.created_at).toLocaleDateString();
 
   return (
-    <div className="group flex items-center gap-1 p-2 rounded-md hover:bg-sidebar-accent cursor-pointer">
-      <button
-        onClick={onView}
-        className="flex-1 text-left min-w-0"
-      >
-        <p className="text-sm truncate">{preview}...</p>
-        <p className="text-xs text-muted-foreground">{date}</p>
-      </button>
-      <Button
-        variant="ghost"
-        size="icon"
-        className="h-6 w-6 opacity-0 group-hover:opacity-100 shrink-0"
-        onClick={(e) => {
-          e.stopPropagation();
-          onDelete();
-        }}
-      >
-        <Trash2 className="h-3 w-3" />
-      </Button>
+    <div className="rounded-lg border border-border bg-card shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+      <div className="flex items-start gap-2 p-3">
+        <button
+          onClick={onView}
+          className="flex-1 text-left min-w-0"
+        >
+          <p className="text-sm leading-snug line-clamp-3">{preview}...</p>
+          <p className="text-xs text-muted-foreground mt-1.5">{date}</p>
+        </button>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-7 w-7 shrink-0 text-muted-foreground hover:text-destructive"
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete();
+          }}
+        >
+          <Trash2 className="h-3.5 w-3.5" />
+        </Button>
+      </div>
     </div>
   );
 }

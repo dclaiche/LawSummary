@@ -33,10 +33,14 @@ export function connectSSE(
 ): () => void {
   const url = `${BASE_URL}/case/${runId}/stream`;
   const eventSource = new EventSource(url);
+  let completed = false;
 
   eventSource.onmessage = (e) => {
     try {
       const event: StreamEvent = JSON.parse(e.data);
+      if (event.type === "run_complete") {
+        completed = true;
+      }
       onEvent(event);
     } catch (err) {
       onError(new Error(`Failed to parse SSE event: ${err}`));
@@ -44,8 +48,10 @@ export function connectSSE(
   };
 
   eventSource.onerror = () => {
-    onError(new Error("SSE connection error"));
     eventSource.close();
+    if (!completed) {
+      onError(new Error("SSE connection error"));
+    }
     onClose();
   };
 

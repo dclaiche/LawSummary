@@ -11,7 +11,7 @@ interface StatutePanelProps {
 
 export function StatutePanel({ statutes, isSearching }: StatutePanelProps) {
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full min-h-0">
       <div className="flex items-center gap-2 p-4 border-b border-border">
         <BookOpen className="h-4 w-4 text-primary" />
         <h3 className="font-semibold">California Statutes</h3>

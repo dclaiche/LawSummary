@@ -17,11 +17,12 @@ export function ResultsScreen() {
     error,
     wave1Active,
     wave2Active,
+    selectedArchiveId,
   } = useAppState();
   const { saveCase } = useArchive();
   const savedRef = useRef(false);
 
-  // Auto-save when run completes
+  // Auto-save when run completes (skip if viewing an archived case)
   useEffect(() => {
     if (
       !isLoading &&
@@ -29,7 +30,8 @@ export function ResultsScreen() {
       runId &&
       factPattern &&
       (statutes.length > 0 || caseLaw.length > 0) &&
-      !savedRef.current
+      !savedRef.current &&
+      !selectedArchiveId
     ) {
       savedRef.current = true;
       saveCase(inputText, runId, {
@@ -39,7 +41,7 @@ export function ResultsScreen() {
         case_law: caseLaw,
       });
     }
-  }, [isLoading, error, runId, factPattern, statutes, caseLaw, inputText, saveCase]);
+  }, [isLoading, error, runId, factPattern, statutes, caseLaw, inputText, saveCase, selectedArchiveId]);
 
   // Reset saved ref when runId changes
   useEffect(() => {
@@ -84,12 +86,12 @@ export function ResultsScreen() {
       )}
 
       {/* Split Panel */}
-      <div className="flex-1 flex overflow-hidden">
-        <div className="flex-1 overflow-hidden">
+      <div className="flex-1 flex min-h-0">
+        <div className="flex-1 min-h-0 min-w-0">
           <StatutePanel statutes={statutes} isSearching={wave1Active} />
         </div>
         <Separator orientation="vertical" />
-        <div className="flex-1 overflow-hidden">
+        <div className="flex-1 min-h-0 min-w-0">
           <CaseLawPanel caseLaw={caseLaw} isSearching={wave2Active} />
         </div>
       </div>
