@@ -8,6 +8,8 @@ import {
   SheetDescription,
 } from "@/components/ui/sheet";
 
+const API_BASE = import.meta.env.VITE_API_URL || "";
+
 interface PasswordModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -29,7 +31,7 @@ export function PasswordModal({
     setIsValidating(true);
 
     try {
-      const response = await fetch("/api/validate-password", {
+      const response = await fetch(`${API_BASE}/api/validate-password`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
