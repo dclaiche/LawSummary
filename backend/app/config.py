@@ -4,6 +4,7 @@ from pydantic_settings import BaseSettings
 class Settings(BaseSettings):
     anthropic_api_key: str = ""
     courtlistener_token: str = ""
+    analyze_password: str = ""
     cors_origins: list[str] = ["http://localhost:5173"]
     log_level: str = "INFO"
 

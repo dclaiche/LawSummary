@@ -1,12 +1,14 @@
 import asyncio
+import secrets
 
 from fastapi import APIRouter, HTTPException, BackgroundTasks
 from fastapi.responses import StreamingResponse
 
-from app.models.schemas import CaseRequest, CaseResponse, FinalResult
+from app.models.schemas import CaseRequest, CaseResponse, FinalResult, PasswordRequest, PasswordResponse
 from app.models.events import StreamEvent, EventType
 from app.core.run_store import run_store, RunState
 from app.core.sse_manager import sse_manager
+from app.config import settings
 
 router = APIRouter()
 
@@ -14,6 +16,12 @@ router = APIRouter()
 @router.get("/health")
 async def health_check():
     return {"status": "ok"}
+
+
+@router.post("/validate-password", response_model=PasswordResponse)
+async def validate_password(req: PasswordRequest):
+    is_valid = secrets.compare_digest(req.password, settings.analyze_password)
+    return PasswordResponse(valid=is_valid)
 
 
 @router.post("/case", response_model=CaseResponse)

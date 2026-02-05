@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { CaseTextArea } from "./CaseTextArea";
+import { PasswordModal } from "./PasswordModal";
 import { useCaseSubmission } from "@/hooks/useCaseSubmission";
 import { useAppState, useAppDispatch } from "@/context/AppContext";
 import { Send } from "lucide-react";
@@ -10,6 +11,7 @@ export function CaseInputScreen() {
   const dispatch = useAppDispatch();
   const { submit } = useCaseSubmission();
   const [localText, setLocalText] = useState(inputText);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
 
   const canSubmit = localText.length >= 20 && !isLoading;
 
@@ -17,6 +19,11 @@ export function CaseInputScreen() {
     if (!canSubmit) return;
     dispatch({ type: "SET_INPUT_TEXT", text: localText });
     submit(localText);
+  };
+
+  const handleAnalyzeClick = () => {
+    if (!canSubmit) return;
+    setShowPasswordModal(true);
   };
 
   return (
@@ -40,7 +47,7 @@ export function CaseInputScreen() {
           <span className="text-sm text-muted-foreground">
             {localText.length} / 20,000 characters
           </span>
-          <Button onClick={handleSubmit} disabled={!canSubmit}>
+          <Button onClick={handleAnalyzeClick} disabled={!canSubmit}>
             <Send className="mr-2 h-4 w-4" />
             Analyze
           </Button>
@@ -52,6 +59,12 @@ export function CaseInputScreen() {
           </div>
         )}
       </div>
+
+      <PasswordModal
+        open={showPasswordModal}
+        onOpenChange={setShowPasswordModal}
+        onSuccess={handleSubmit}
+      />
     </div>
   );
 }

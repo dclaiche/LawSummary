@@ -19,7 +19,7 @@ export function ArchiveItem({ archivedCase, onView, onDelete }: ArchiveItemProps
           onClick={onView}
           className="flex-1 text-left min-w-0"
         >
-          <p className="text-sm leading-snug line-clamp-3">{preview}...</p>
+          <p className="text-sm leading-snug line-clamp-3 text-card-foreground">{preview}...</p>
           <p className="text-xs text-muted-foreground mt-1.5">{date}</p>
         </button>
         <Button

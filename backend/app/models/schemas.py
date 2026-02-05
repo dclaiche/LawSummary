@@ -53,3 +53,11 @@ class FinalResult(BaseModel):
 
 class CaseResponse(BaseModel):
     run_id: str
+
+
+class PasswordRequest(BaseModel):
+    password: str
+
+
+class PasswordResponse(BaseModel):
+    valid: bool

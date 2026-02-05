@@ -17,7 +17,7 @@
   --color-accent-foreground: oklch(0.205 0.064 285.89);
   --color-destructive: oklch(0.577 0.245 27.33);
   --color-destructive-foreground: oklch(0.577 0.245 27.33);
-  --color-border: oklch(0.922 0 0);
+  --color-border: oklch(0.85 0 0);
   --color-input: oklch(0.922 0 0);
   --color-ring: oklch(0.708 0.165 254.62);
   --color-chart-1: oklch(0.646 0.222 41.12);
@@ -31,7 +31,7 @@
   --color-sidebar-primary-foreground: oklch(0.985 0 0);
   --color-sidebar-accent: oklch(0.97 0 0);
   --color-sidebar-accent-foreground: oklch(0.205 0.064 285.89);
-  --color-sidebar-border: oklch(0.922 0 0);
+  --color-sidebar-border: oklch(0.85 0 0);
   --color-sidebar-ring: oklch(0.708 0.165 254.62);
   --radius-sm: 0.25rem;
   --radius-md: 0.375rem;
@@ -51,4 +51,68 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
   }
+  .dark {
+    /* VS Code-style slate grey - slight blue tint */
+    --color-background: oklch(0.23 0.005 260);
+    --color-foreground: oklch(0.93 0 0);
+    --color-card: oklch(0.26 0.005 260);
+    --color-card-foreground: oklch(0.93 0 0);
+    --color-popover: oklch(0.26 0.005 260);
+    --color-popover-foreground: oklch(0.93 0 0);
+    --color-primary: oklch(0.65 0.064 285.89);
+    --color-primary-foreground: oklch(0.98 0 0);
+    --color-secondary: oklch(0.30 0.005 260);
+    --color-secondary-foreground: oklch(0.93 0 0);
+    --color-muted: oklch(0.30 0.005 260);
+    --color-muted-foreground: oklch(0.65 0 0);
+    --color-accent: oklch(0.32 0.008 260);
+    --color-accent-foreground: oklch(0.93 0 0);
+    --color-destructive: oklch(0.598 0.241 27.518);
+    --color-destructive-foreground: oklch(0.98 0 0);
+    --color-border: oklch(0.38 0.008 260);
+    --color-input: oklch(0.28 0.005 260);
+    --color-ring: oklch(0.55 0.064 285.89);
+    --color-chart-1: oklch(0.488 0.243 264.05);
+    --color-chart-2: oklch(0.696 0.17 162.48);
+    --color-chart-3: oklch(0.93 0 0);
+    --color-chart-4: oklch(0.806 0.204 60.62);
+    --color-chart-5: oklch(0.769 0.188 70.08);
+    --color-sidebar: oklch(0.21 0.005 260);
+    --color-sidebar-foreground: oklch(0.93 0 0);
+    --color-sidebar-primary: oklch(0.65 0.064 285.89);
+    --color-sidebar-primary-foreground: oklch(0.98 0 0);
+    --color-sidebar-accent: oklch(0.28 0.008 260);
+    --color-sidebar-accent-foreground: oklch(0.93 0 0);
+    --color-sidebar-border: oklch(0.38 0.008 260);
+    --color-sidebar-ring: oklch(0.55 0.064 285.89);
+  }
 }
+
+/* Dark mode overrides for Tailwind utility classes */
+.dark .bg-background { background-color: var(--color-background) !important; }
+.dark .bg-card { background-color: var(--color-card) !important; }
+.dark .bg-muted { background-color: var(--color-muted) !important; }
+.dark .bg-muted\/30 { background-color: oklch(0.30 0.005 260 / 0.3) !important; }
+.dark .bg-primary { background-color: var(--color-primary) !important; }
+.dark .bg-primary\/10 { background-color: oklch(0.65 0.064 285.89 / 0.1) !important; }
+.dark .bg-secondary { background-color: var(--color-secondary) !important; }
+.dark .bg-sidebar { background-color: var(--color-sidebar) !important; }
+.dark .bg-accent { background-color: var(--color-accent) !important; }
+
+.dark .text-foreground { color: var(--color-foreground) !important; }
+.dark .text-card-foreground { color: var(--color-card-foreground) !important; }
+.dark .text-muted-foreground { color: var(--color-muted-foreground) !important; }
+.dark .text-primary { color: var(--color-primary) !important; }
+.dark .text-primary-foreground { color: var(--color-primary-foreground) !important; }
+.dark .text-secondary-foreground { color: var(--color-secondary-foreground) !important; }
+.dark .text-sidebar-foreground { color: var(--color-sidebar-foreground) !important; }
+.dark .text-accent-foreground { color: var(--color-accent-foreground) !important; }
+
+.dark .border-border { border-color: var(--color-border) !important; }
+.dark .border-input { border-color: var(--color-input) !important; }
+.dark .border-primary\/30 { border-color: oklch(0.65 0.064 285.89 / 0.3) !important; }
+
+.dark .hover\:bg-accent:hover { background-color: var(--color-accent) !important; }
+.dark .hover\:bg-muted:hover { background-color: var(--color-muted) !important; }
+.dark .hover\:text-accent-foreground:hover { color: var(--color-accent-foreground) !important; }
+.dark .hover\:text-foreground:hover { color: var(--color-foreground) !important; }
