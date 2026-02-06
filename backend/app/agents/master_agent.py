@@ -208,13 +208,23 @@ async def _execute_pipeline(
 
         final_cases: list[CaseLawResult] = []
         for c in synth_data.get("ranked_cases", [])[:4]:
+            # Find original candidate to recover URL (same pattern as statute synthesis)
+            # Use normalized comparison because the LLM may subtly alter names/citations
+            c_name = c.get("case_name", "").strip().lower()
+            c_cite = c.get("citation", "").strip().lower()
+            original = next(
+                (cand for cand in all_caselaw_candidates
+                 if (c_name and cand.case_name.strip().lower() == c_name)
+                 or (c_cite and cand.citation.strip().lower() == c_cite)),
+                None,
+            )
             final_cases.append(
                 CaseLawResult(
                     case_name=c.get("case_name", ""),
                     citation=c.get("citation", ""),
                     court=c.get("court", ""),
                     date_filed=c.get("date_filed", ""),
-                    url=c.get("url", ""),
+                    url=original.url if original else "",
                     snippet=c.get("snippet", ""),
                     relevance_summary=c.get("relevance_summary", ""),
                     related_statutes=c.get("related_statutes", []),

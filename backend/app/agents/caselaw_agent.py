@@ -132,9 +132,11 @@ async def run_caselaw_agent(
             continue
 
         # Find the URL from our search hits
+        # Use normalized comparison because the LLM may subtly alter case names
         url = ""
+        ev_name = ev.get("case_name", "").strip().lower()
         for hit in hits_list:
-            if hit.case_name == ev.get("case_name"):
+            if hit.case_name.strip().lower() == ev_name:
                 url = f"{CL_BASE}{hit.absolute_url}" if hit.absolute_url else ""
                 break
 
